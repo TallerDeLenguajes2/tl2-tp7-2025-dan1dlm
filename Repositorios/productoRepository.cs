@@ -33,7 +33,7 @@ public class ProductoRepository
 
     public Producto GetProducto(int idProducto)
     {
-      using var conexion = new SqliteConnection(cadenaConexion);
+      using var conexion = new SqliteConnection(connectionString);
       conexion.Open();
 
       string sql = "SELECT idProducto, Descripcion, Precio FROM Productos WHERE idProducto = @idProducto";
@@ -42,7 +42,55 @@ public class ProductoRepository
 
       using var lector = comando.ExecuteReader();
 
-      if(lector.Read()) 
+      if(lector.Read()){
+        var producto = new Producto {
+            IdProducto = lector.GetInt32(0),
+            Descripcion = lector.GetString(1),
+            Precio = lector.GetDecimal(2)
+        };
+
+        return producto;
+      } 
+
+      return null;
+    }
+
+    public void insertarProducto(Producto productoNuevo){
+        using var conexion = new SqliteConnection(connectionString);
+        conexion.Open();
+
+        string sql = "INSERT INTO Productos (idProducto, Descripcion, Precio) VALUES (@idProducto, @Descripcion, @Precio)";
+        using var comando = new SqliteCommand(sql, conexion);
+
+        comando.Parameters.Add(new SqliteParameter("@idProducto", productoNuevo.IdProducto));
+        comando.Parameters.Add(new SqliteParameter("@Descripcion", productoNuevo.Descripcion));
+        comando.Parameters.Add(new SqliteParameter("@Precio", productoNuevo.Precio));
+
+        comando.ExecuteNonQuery();
+    }
+
+    public void eliminarProducto(int idEliminar){
+        using var conexion = new SqliteConnection(connectionString);
+        conexion.Open();
+
+        string sql = "DELETE FROM Productos WHERE idProducto = @idEliminar";
+        using var comando = new SqliteCommand(sql, conexion);
+
+        comando.Parameters.Add(new SqliteParameter("@idProducto", idEliminar));
+        comando.ExecuteNonQuery();
+    }
+
+    public void ActualizarProducto(int idProducto, decimal nuevoPrecio){
+        using var conexion = new SqliteConnection(connectionString);
+        conexion.Open();
+
+        string sql = "UPDATE Productos SET Precio = @Precio WHERE idProducto = @idProducto";
+        using var comando = new SqliteCommand(sql, conexion);
+
+        comando.Parameters.Add(new SqliteParameter("@Precio", nuevoPrecio));
+        comando.Parameters.Add(new SqliteParameter("@idProducto", idProducto));
+
+        comando.ExecuteNonQuery();
     }
 
 
