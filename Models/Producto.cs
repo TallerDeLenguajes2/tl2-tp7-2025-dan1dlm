@@ -5,7 +5,6 @@ public class Producto{
     private string descripcion;
     private decimal precio;
 
-    public Producto(){}
 
     public int IdProducto{get => idProducto; set => idProducto = value;}
     public string Descripcion{get => descripcion; set => descripcion = value;}

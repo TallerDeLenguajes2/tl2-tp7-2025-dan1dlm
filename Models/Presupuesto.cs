@@ -2,22 +2,21 @@ public class Presupuesto
 {
     private int idPresupuesto;
     private string nombreDestinatario;
-    private DateTime FechaCreacion;
+    private DateTime fechaCreacion;
     List<PresupuestoDetalle> detalle;
 
-    Presupuesto(int idPresupuesto, string nombreDestinatario, DateTime FechaCreacion, List<PresupuestoDetalle> detalle)
-    {
-        this.idPresupuesto = idPresupuesto;
-        this.nombreDestinatario = nombreDestinatario;
-        this.FechaCreacion = FechaCreacion;
-        this.detalle = detalle;
-    }
+    public Presupuesto() { }
+    
+    public int IdPresupuesto { get => idPresupuesto; set => idPresupuesto = value; }
+    public string NombreDestinatario { get => nombreDestinatario; set => nombreDestinatario = value; }
+    public DateTime FechaCreacion { get => fechaCreacion; set => fechaCreacion = value; }
+    public List<PresupuestoDetalle> Detalle { get => detalle; set => detalle = value; }
 
     //metodos
 
-    public int montoPresupuesto()
+    public decimal montoPresupuesto()
     {
-        int total = 0;
+        decimal total = 0;
         foreach (var p in detalle)
         {
             total += p.Cantidad * p.Producto.Precio;
@@ -26,9 +25,9 @@ public class Presupuesto
         return total;
     }
 
-    public double montoPresupuestoConIVA()
+    public decimal montoPresupuestoConIVA()
     {
-        return (montoPresupuesto() * (1.21));
+        return montoPresupuesto() * 1.21m;
     }
 
     public int cantidadProductos()
